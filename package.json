@@ -1,0 +1,25 @@
+{
+  "name": "scheml",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/nogw/ocaml-scheme",
+  "license": "MIT",
+  "esy": {
+    "build": "dune build -p #{self.name}",
+    "buildsInSource": "_build",
+    "release": { "releasedBinaries": [ "#{self.name}.exe" ] }
+  },
+  "scripts": {
+    "watch": "esy dune build -p #{self.name} --watch",
+    "start": "esy x #{self.name}.exe"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@opam/menhir": "20211230",
+    "@opam/ocaml-lsp-server": "1.4.1",
+    "@opam/ppx_deriving": "5.2.1",
+    "@opam/sedlex": "2.5",
+    "ocaml": "4.11.0"
+  },
+  "devdependencies": { "@opam/ocamlformat": "*" }
+}

@@ -1,0 +1,4 @@
+(executable
+ (name scheml)
+ (public_name scheml.exe)
+ (libraries lib))
