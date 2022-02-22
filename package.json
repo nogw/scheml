@@ -14,12 +14,18 @@
     "start": "esy x #{self.name}.exe"
   },
   "dependencies": {
+    "@opam/cmdliner": "1.0.4",
     "@opam/dune": "*",
+    "@opam/linenoise": "1.3.1",
     "@opam/menhir": "20211230",
     "@opam/ocaml-lsp-server": "1.4.1",
+    "@opam/ocamlformat": "*",
     "@opam/ppx_deriving": "5.2.1",
     "@opam/sedlex": "2.5",
     "ocaml": "4.11.0"
   },
-  "devdependencies": { "@opam/ocamlformat": "*" }
+  "devdependencies": {
+    "@opam/ocaml-lsp-server": "1.4.1",
+    "@opam/ocamlformat": "*"
+  }
 }
