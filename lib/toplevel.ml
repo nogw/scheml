@@ -27,27 +27,38 @@ and execute_file fn =
 
 and execute_commands commands = List.iter execute_command commands
 
+let rec input prompt callback =
+  match LNoise.linenoise prompt with
+  | None -> ()
+  | Some v ->
+      callback v;
+      input prompt callback
+
 let shell ast () =
   print_endline "Welcome to Scheml REPL";
   print_endline "Press CTRL-C to exit";
-  try
-    while true do
-      try
-        print_string "user> ";
-        let str = read_line () in
-        let lex = Utils.lexer_from_string str in
-        let commands =
-          try Parser.toplevel Lexer.token lex
-          with Parsing.Parse_error -> fatal_error (Utils.syntax_error lex)
-        in
-        if not ast then execute_commands commands
-        else commands |> List.map show_command |> List.iter print_endline
-      with
-      | FatalError msg -> Utils.show_error msg
-      | Interprete.RuntimeError msg -> Utils.show_error msg
-      | Sys.Break -> Utils.show_error "Interrupted"
-    done
-  with End_of_file -> print_endline "nothing here"
+
+  LNoise.history_load ~filename:"history.txt" |> ignore;
+  LNoise.history_set ~max_length:100 |> ignore;
+
+  (fun from_user ->
+    if from_user = "quit" then exit 0;
+    LNoise.history_add from_user |> ignore;
+    LNoise.history_save ~filename:"history.txt" |> ignore;
+    try
+      from_user |> fun str ->
+      let lex = Utils.lexer_from_string str in
+      let commands =
+        try Parser.toplevel Lexer.token lex
+        with Parsing.Parse_error -> fatal_error (Utils.syntax_error lex)
+      in
+      if not ast then execute_commands commands
+      else commands |> List.map show_command |> List.iter print_endline
+    with
+    | FatalError msg -> show_error msg |> ignore
+    | Interprete.RuntimeError msg -> show_error msg |> ignore
+    | _ -> show_error "Invalid expression")
+  |> input "user> "
 
 let execute file interactive ast =
   Standard.exec ();
