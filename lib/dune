@@ -1,10 +1,10 @@
 (library
   (name lib)
-  (libraries unix menhirLib)
+  (libraries unix menhirLib cmdliner linenoise)
   (preprocess (pps ppx_deriving.show ppx_deriving.eq)))
 
-; (ocamllex lexer)
+(ocamllex lexer)
 
-; (menhir
-;  (flags --explain)
-;  (modules parser))
+(menhir
+ (flags --explain)
+ (modules parser))
