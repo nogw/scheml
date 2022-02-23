@@ -2,7 +2,7 @@
 
 A lisp implementation in OCaml
 
-## [EXAMPLES](http://github.com/nogw/scheml/examples)
+## [EXAMPLES](https://github.com/nogw/scheml/tree/master/examples)
 
 ## TODO:
 
