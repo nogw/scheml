@@ -1,34 +1,44 @@
 open Ast
-open Interprete;;
+open Interprete
 
-define "symbol?"
-  (Builtin
-     ("symbol?", fun e -> match arg1 e with Symbol _ -> True | _ -> False))
+let binary_operation e op acc =
+  let rest = list_of_pair e in
+  if List.length (List.filter (fun a -> is_int a <> true) rest) = 0 then
+    List.fold_left op acc (List.map int_of_Int rest) |> fun a -> Int a
+  else
+    error "wrong type" define "symbol?"
+      (Builtin
+         ("symbol?", fun e -> match arg1 e with Symbol _ -> True | _ -> False))
 ;;
 
 define "number"
   (Builtin ("number", fun e -> match arg1 e with Int _ -> True | _ -> False))
 ;;
 
-define "+"
-  (Builtin
-     ( "+",
-       fun e ->
-         match arg2 e with
-         | Int a, Int b -> Int (a + b)
-         | _ -> error "wrong type" ))
-;;
+define "+" (Builtin ("+", fun e -> binary_operation e ( + ) 0));;
 
-(* define "+"
-     (Builtin
-        ( "+",
-          fun e ->
-            let rest = list_of_pair e in
-            let check = List.filter (fun a -> is_int a <> true) rest in
-            if List.length check = 0 then
-              List.fold_left ( + ) 0 (List.map int_of_Int rest) |> fun a -> Int a
-            else error "error" ))
-   ;; *)
+define "-" (Builtin ("-", fun e -> binary_operation e ( - ) 0));;
+
+define "*" (Builtin ("*", fun e -> binary_operation e ( * ) 1));;
+
+define "/"
+  (Builtin
+     ( "/",
+       fun e ->
+         let rec aux acc rest =
+           match rest with
+           | x :: xs when x = 0 -> error "division by 0"
+           | x :: xs -> aux (acc / x) xs
+           | [] -> acc
+         in
+
+         let rest = list_of_pair e in
+         List.filter (fun a -> is_int a <> true) rest |> fun check ->
+         if List.length check = 0 then
+           List.map int_of_Int rest |> fun lit ->
+           Int (aux (List.hd lit) (List.tl lit))
+         else error "wrong type" ))
+;;
 
 define "display"
   (Builtin
@@ -37,34 +47,6 @@ define "display"
          let expr = e |> string_of_expr in
          String.sub expr 1 (String.length expr - 2) |> print_endline;
          Null ))
-;;
-
-define "-"
-  (Builtin
-     ( "-",
-       fun e ->
-         match arg2 e with
-         | Int a, Int b -> Int (a - b)
-         | _ -> error "wrong type" ))
-;;
-
-define "*"
-  (Builtin
-     ( "*",
-       fun e ->
-         match arg2 e with
-         | Int a, Int b -> Int (a * b)
-         | _ -> error "wrong type" ))
-;;
-
-define "/"
-  (Builtin
-     ( "/",
-       fun e ->
-         match arg2 e with
-         | Int a, Int 0 -> error "division by zero"
-         | Int a, Int b -> Int (a / b)
-         | _ -> error "wrong type" ))
 ;;
 
 define "modulo"
@@ -174,6 +156,6 @@ define "list?"
   (Builtin ("list?", fun e -> if is_list (arg1 e) then True else False))
 ;;
 
-define "quote" (Macro ("quote", fun env e -> arg1 e))
+define "quote" (Macro ("quote", fun _ e -> arg1 e))
 
 let exec () = ()

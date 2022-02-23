@@ -3,6 +3,9 @@
     '() 
     (cons m (range (+ m 1) n)))))
 
-(define sum (lambda (a) (+ a 1)))
+(define iter (lambda (f lst)
+  (if (null? lst)
+    '()
+    (cons (f (car lst)) (iter f (cdr lst)))))) 
 
 (display (range 1 10))
