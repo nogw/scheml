@@ -1,5 +1,1 @@
-(define sum (lambda (a) 
-  (if (< a 5)  
-    (+ a 5) 
-    (- a 5)
-  )))
+(define sum (lambda (a) (+ a 1)))
