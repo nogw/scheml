@@ -6,5 +6,6 @@ A lisp implementation in OCaml
 
 ## TODO:
 
+- [ ] sequencing
 - [ ] fix lists
 - [ ] remove mutability
