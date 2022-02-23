@@ -32,7 +32,8 @@ let rec equal (e1, e2) =
   | Procedure _ | Macro _ | Builtin _ -> e1 == e2
 
 
-let rec string_of_expr = function
+let rec string_of_expr = 
+  function
   | Symbol s -> s
   | Int i -> string_of_int i
   | Macro (m, _) -> "#<primitive-macro " ^ m ^ ">"
@@ -43,7 +44,8 @@ let rec string_of_expr = function
   | Null -> "()"
   | Pair (a, b) -> "(" ^ string_of_pair a b ^ ")"
 
-and string_of_pair e = function
+and string_of_pair e = 
+  function
   | Null -> string_of_expr e
   | Pair (a, b) -> string_of_expr e ^ " " ^ (string_of_pair a b)
   | b -> string_of_expr e ^ " " ^ string_of_expr b

@@ -30,6 +30,15 @@ define "+"
             else error "error" ))
    ;; *)
 
+define "display"
+  (Builtin
+     ( "display",
+       fun e ->
+         let expr = e |> string_of_expr in
+         String.sub expr 1 (String.length expr - 2) |> print_endline;
+         Null ))
+;;
+
 define "-"
   (Builtin
      ( "-",
@@ -55,6 +64,15 @@ define "/"
          match arg2 e with
          | Int a, Int 0 -> error "division by zero"
          | Int a, Int b -> Int (a / b)
+         | _ -> error "wrong type" ))
+;;
+
+define "modulo"
+  (Builtin
+     ( "modulo",
+       fun e ->
+         match arg2 e with
+         | Int a, Int b -> Int (a mod b)
          | _ -> error "wrong type" ))
 ;;
 
@@ -140,7 +158,8 @@ define "car"
 define "cdr"
   (Builtin
      ( "cdr",
-       fun e -> match arg1 e with Pair (_, e1) -> e1 | _ -> error "wrong type" ))
+       fun e -> match arg1 e with Pair (_, e1) -> e1 | _ -> error "wrong type"
+     ))
 ;;
 
 define "null?"
