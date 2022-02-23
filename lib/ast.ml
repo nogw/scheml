@@ -37,8 +37,8 @@ let rec string_of_expr = function
   | Macro (m, _) -> "#<primitive-macro " ^ m ^ ">"
   | Builtin (b, _) -> "#<primitive-procedure " ^ b ^ ">"
   | Procedure (_, args, _) -> "#<procedure (" ^ String.concat " " args ^ ")>"
-  | True -> "#true"
-  | False -> "#false"
+  | True -> "#t"
+  | False -> "#f"
   | Null -> "()"
   | Pair (a, b) -> "(" ^ string_of_pair a b ^ ")"
 

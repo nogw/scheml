@@ -19,8 +19,8 @@ rule token = parse
   | '-'? ['0'-'9']+   { INT (int_of_string(lexeme lexbuf)) }
   | "("               { LPAREN }
   | ")"               { RPAREN }
-  | "#true"           { TRUE }
-  | "#false"          { FALSE }
+  | "#t"              { TRUE }
+  | "#f"              { FALSE }
   | '.'               { DOT }
   | '\''              { QUOTE }
   | "$quit"           { QUIT }

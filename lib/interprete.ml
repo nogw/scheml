@@ -56,14 +56,8 @@ let rec list_of_pair pair =
   | Pair (Int i, Pair (i', p)) -> Int i :: list_of_pair (Pair (i', p))
   | _ -> failwith "error to parse pair"
 
-let is_int check =
-  match check with
-  | Int _ -> true
-  | _ -> failwith "wrong type"
+let is_int check = match check with Int _ -> true | _ -> failwith "wrong type"
 
-let int_of_Int =
-  function
-  | Int i -> i
-  | _ -> failwith "error" 
+let int_of_Int = function Int i -> i | _ -> failwith "error"
 
 let show_result expr = expr |> string_of_expr |> print_endline

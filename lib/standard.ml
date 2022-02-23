@@ -10,25 +10,25 @@ define "number"
   (Builtin ("number", fun e -> match arg1 e with Int _ -> True | _ -> False))
 ;;
 
-(* define "+"
-     (Builtin
-        ( "+",
-          fun e ->
-            match arg2 e with
-            | Int a, Int b -> Int (a + b)
-            | _ -> error "wrong type" ))
-   ;; *)
-
 define "+"
   (Builtin
      ( "+",
        fun e ->
-         let rest = list_of_pair e in
-         let check = List.filter (fun a -> is_int a <> true) rest in
-         if List.length check = 0 then
-           List.fold_left ( + ) 0 (List.map int_of_Int rest) |> fun a -> Int a
-         else error "error" ))
+         match arg2 e with
+         | Int a, Int b -> Int (a + b)
+         | _ -> error "wrong type" ))
 ;;
+
+(* define "+"
+     (Builtin
+        ( "+",
+          fun e ->
+            let rest = list_of_pair e in
+            let check = List.filter (fun a -> is_int a <> true) rest in
+            if List.length check = 0 then
+              List.fold_left ( + ) 0 (List.map int_of_Int rest) |> fun a -> Int a
+            else error "error" ))
+   ;; *)
 
 define "-"
   (Builtin
@@ -133,13 +133,14 @@ define "cons"
 define "car"
   (Builtin
      ( "car",
-       fun e -> match arg1 e with Pair (_, e) -> e | _ -> error "wrong type" ))
+       fun e -> match arg1 e with Pair (e1, _) -> e1 | _ -> error "wrong type"
+     ))
 ;;
 
 define "cdr"
   (Builtin
      ( "cdr",
-       fun e -> match arg1 e with Pair (e, _) -> e | _ -> error "wrong type" ))
+       fun e -> match arg1 e with Pair (_, e1) -> e1 | _ -> error "wrong type" ))
 ;;
 
 define "null?"
